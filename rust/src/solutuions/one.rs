@@ -1,4 +1,4 @@
-use std::{fs, vec};
+use std::fs;
 use std::process::exit;
 
 fn process_exit(filename: &str) {
@@ -33,14 +33,13 @@ pub fn solve(filename: &str){
     let contents: String = fs::read_to_string(filename)
         .expect("Should have been able to read the file");
     for line in contents.lines().skip(1) {
-        let number: u8 = line.parse().unwrap();
-        let mut vectors: Vec<u16> = vec![];
+        let number: u64 = line.parse().unwrap();
+        let mut sum: u64 = 0;
         for n in 1..number{
             if n%3 ==0 || n%5 ==0 {
-                vectors.push(n as u16);
+                sum = sum + n as u64;
             }
         }
-        let sum:u16 = vectors.iter().sum();
         println!("{}", sum);
     }
 }   
