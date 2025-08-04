@@ -70,3 +70,29 @@ for n in numbers.iter(){
 ```
 Did it help ?  - No.  Some test cases failed because the results were wrong. Let's go back to basics and see if we can figure out better optimization.
 ### True Solution:
+---
+Building an array or looping over a range is the problem, If we take a look at :
+```rust
+for number in (0..n).step_by(3) {
+    sum = sum + number;
+}
+```
+In layman maths this is $3 + 6 + 9 + 12 + .. + n$ where $n$ is last number such that $n<N$ and $n$ is divisible by 3. If we take 3 common from those equations then it becomes $3 * {sum of n natural numbers} $. So we can simply replace those loops by functions which can use formula to determine the sum. 
+```rust
+fn sum_of_multiples(factor: u64, n: u64) -> u64 {
+    let limit: u64;
+    if n%factor == 0 {
+        limit = (n - factor)/ factor;
+    }
+    else {
+        limit = (n - n%factor)/factor;
+    }
+    let sum =  factor * limit * (limit + 1 )/2;
+    return sum;
+}   
+
+fn solvenum(n: u64) {
+    let sum: u64 = sum_of_multiples(3, n) + sum_of_multiples(5, n) - sum_of_multiples(15, n);
+    println!("Number : {n} and Sum : {}", sum);
+}
+```
