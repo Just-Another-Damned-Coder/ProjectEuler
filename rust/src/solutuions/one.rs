@@ -1,7 +1,6 @@
 use std::fs;
 use std::path::PathBuf;
 use std::process::exit;
-use std::collections::HashMap;
 
 use clap::Args;
 
@@ -44,31 +43,39 @@ fn solvefile(filename: PathBuf){
         true => (),
         false => exit(1),
     }
-    println!("For each test case, you get a number N. Your task is to find the sum of all natural numbers less than N that are multiples of 3 or 5.");
+    println!("Problem :");
+    println!("-------------------------------- :");
+    println!("  For each test case, you get a number N. Your task is to find the sum of all natural numbers less than N that are multiples of 3 or 5.");
+    println!("");
     let contents: String = fs::read_to_string(filename)
         .expect("Should have been able to read the file");
-    let mut numbers: Vec<u64> = vec![];
     for line in contents.lines().skip(1) {
         let number: u64  = line.parse().expect("Not a number.");
-        for n in 1..number {
-            if n%3 ==0 || n%5 ==0 {
-                numbers.push(n);
-            }
-        }
-        let sum: u64 = numbers.iter().sum();
-        println!("{}", sum);
+        let sum: u64 = sum_of_multiples(3, number) + sum_of_multiples(5, number) - sum_of_multiples(15, number);
+        println!("Number : {number} and Sum : {}", sum);
     }
 }
 
+fn sum_of_multiples(factor: u64, n: u64) -> u64 {
+    let limit: u64;
+    if n%factor == 0 {
+        let n = n -1 ;
+        limit = (n - n%factor)/factor;
+    }
+    else {
+        limit = (n - n%factor)/factor;
+    }
+    let sum =  factor * limit * (limit + 1 )/2;
+    return sum;
+}   
 
 fn solvenum(n: u64) {
-    let mut sum: u64 = 0;
-    for number in 1..n {
-        if number%3 ==0 || number%5 ==0 {
-            sum = sum + number;
-        }
-    }
-    println!("{}", sum);
+    println!("Problem :");
+    println!("-------------------------------- :");
+    println!("  For each test case, you get a number N. Your task is to find the sum of all natural numbers less than N that are multiples of 3 or 5.");
+    println!("");
+    let sum: u64 = sum_of_multiples(3, n) + sum_of_multiples(5, n) - sum_of_multiples(15, n);
+    println!("Number : {n} and Sum : {}", sum);
 }
 
 pub fn solve(arguments: MultiplesOf3and5){
