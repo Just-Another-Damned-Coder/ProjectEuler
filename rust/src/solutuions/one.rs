@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use std::process::exit;
 
 use clap::Args;
-
+use crate::utils::validate;
 #[derive(Args, Debug)]
 pub struct MultiplesOf3and5 {
     // The filename containing test cases.
@@ -15,31 +15,14 @@ pub struct MultiplesOf3and5 {
     pub number: Option<u64>,
 }
 
-fn process_exit(filename: &str) {
-    println!("The file {filename} does not exist -_- Are you serious ?");
-    exit(0);
-}
-
-fn check_file(filename: &str) -> bool{
-    let contents: String = fs::read_to_string(filename).expect("Unable to read the file.");
-    // Assuming the file contains one test case, then it must be of n, n lines, so total n+1 lines, 
-    // Check that condition.
-    let length = contents.lines().nth(0).expect("Not able to read the line.");
-    let length: u8 = length.parse().unwrap();
-    let lines = contents.lines().count() as u8;
-    if lines == length + 1 as u8 {
-        return true;
-    }
-    return false;
-}
 
 fn solvefile(filename: PathBuf){
     let filename = filename.to_str().expect("Unable to read the filename.");
     match fs::exists(filename) {
         Ok(true) => (),
-        _ => process_exit(filename),
+        _ => validate::process_exit(filename),
     }
-    match check_file(filename) {
+    match validate::check_file(filename) {
         true => (),
         false => exit(1),
     }
@@ -88,34 +71,4 @@ pub fn solve(arguments: MultiplesOf3and5){
         Some(num) => solvenum(num),
         None => (),
     }
-
-
-
-    // let mut numbers: Vec<u64> = vec![];
-    // let mut answers: HashMap<u64, u64> = HashMap::new();
-    // for line in contents.lines().skip(1) {
-    //     let number: u64 = line.parse().unwrap();
-    //     numbers.push(number);
-        
-    // }
-    // let mut numbers_ = numbers.clone();
-    // numbers_.sort();
-    // let (mut number, mut result) = (0 as u64,0 as u64);
-    // for n in numbers_.iter(){
-    //     let multiples: Vec<u64> = (number..*n)
-    //     .filter(|n| n % 3 == 0 || n % 5 == 0)
-    //     .collect();
-    //     let sum: u64 = multiples.iter().sum();
-    //     // println!("{}", sum + result);
-    //     answers.insert(*n, sum + result);
-    //     result = sum;
-    //     number = *n;
-
-    // }
-    // println!("{:?}", answers);
-    // for n in numbers.iter(){
-    //     let value = answers.get(n).unwrap();
-    //     println!("{value}");
-    // }
-    
 }   
